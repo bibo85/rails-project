@@ -1,0 +1,33 @@
+<% if @page.errors.any? %>
+  <div class="alert alert-danger">
+    <h5>Ошибки:</h5>
+    <ul>
+      <% @page.errors.full_messages.each do |message| %>
+        <li>
+          <%= message %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_for @page do |f| %>
+  <div class="mb-3">
+    <%= f.label :name, class: 'form-label' %>
+    <%= f.text_field :name, placeholder: 'Имя', class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :title, class: 'form-label' %>
+    <%= f.text_field :title, placeholder: 'Заголовок', class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :body, class: 'form-label' %>
+    <%= f.text_area :body, size: "70x5", placeholder: 'Текст', class: 'form-control' %>
+  </div>
+
+  <%= f.hidden_field :parent_id %>
+
+  <%= f.submit 'Сохранить', class: 'btn btn-primary' %>
+<% end %>

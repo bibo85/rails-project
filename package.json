@@ -1,0 +1,12 @@
+{
+  "name": "pages",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/bibo85/rails-project.git",
+  "author": "Vladimir Trofimenko <psdmaster.ru@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "sass": "^3.4.1"
+  }
+}

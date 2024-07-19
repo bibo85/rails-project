@@ -1,0 +1,28 @@
+<% provide :page_title, 'Главная страница' %>
+
+<h1>Главная страница</h1>
+<%= link_to 'Создать родительскую страницу', add_page_path, class: 'btn btn-success btn-sm' %>
+<%#= link_to 'Создать родительскую страницу', add_path, class: 'btn btn-primary btn-sm' %>
+
+<section>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Body</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @pages.each_with_index do |page, idx| %>
+      <tr>
+        <td><%= idx + 1 %></td>
+        <td><%= page.name %></td>
+        <td><%= page.title %></td>
+        <td><%= page.body %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</section>
