@@ -19,9 +19,9 @@ class PagesController < ApplicationController
   def create
     @page = Page.new page_params
     if @page.save
-      redirect_to root_path, status: :see_other, notice: "Страница успешно создана"
+      redirect_to root_path, status: :see_other, success: "Страница успешно создана"
     else
-      render :new, status: :unprocessable_entity, notice: "Исправьте ошибки и попробуйте снова"
+      render :new, status: :unprocessable_entity
     end
   end
 

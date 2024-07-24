@@ -26,6 +26,15 @@
       </nav>
     </div>
     <div class="container p-3">
+      <div class="row">
+        <div class="col-md-12">
+          <% flash.each do |name, message| %>
+            <div class="alert alert-<%= name %>">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      </div>
       <%= yield %>
     </div>
   </body>
