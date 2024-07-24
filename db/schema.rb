@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_19_104257) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_22_070241) do
   create_table "pages", force: :cascade do |t|
     t.string "name"
     t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "parent_id"
-    t.index ["parent_id"], name: "index_pages_on_parent_id"
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_pages_on_ancestry"
   end
 
 end

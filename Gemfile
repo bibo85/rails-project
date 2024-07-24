@@ -32,6 +32,9 @@ gem "jsbundling-rails", "~> 1.3"
 gem 'jquery-rails'
 gem 'sassc-rails'
 
+# Hierarhy
+gem 'ancestry'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

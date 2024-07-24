@@ -1,0 +1,7 @@
+<ul class="nav flex-column nested_nav">
+  <% object.each do |page, children| %>
+    <li class="nav-item"><%= page.name %></li>
+    <%= render 'shared/sub_pages', object: children if children.present? %>
+  <% end %>
+
+</ul>

@@ -1,0 +1,9 @@
+<div class="submenu">
+  <ul class="nav flex-column">
+    <% object.each do |page| %>
+<!--      <li class="nav-item"><%#= page.name %></li>-->
+      <li class="nav-item"><%= link_to "Тестовая ссылка", page_path(id: page.name) %></li>
+      <%= render 'shared/sub_pages', object: page.descendants.arrange %>
+    <% end %>
+  </ul>
+</div>
