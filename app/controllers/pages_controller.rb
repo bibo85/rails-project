@@ -25,6 +25,26 @@ class PagesController < ApplicationController
     end
   end
 
+  def edit
+    @page = Page.find get_page_id_from_path
+  end
+
+  def update
+    @page = Page.find params[:id]
+    if @page.update page_params
+      flash[:success] = "Страница успешно обновлена"
+      puts @page.inspect
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @page = Page.find get_page_id_from_path
+    @page.destroy
+    redirect_to root_path, status: :see_other, success: "Страница успешно удалена"
+  end
+
   private
 
   def page_params

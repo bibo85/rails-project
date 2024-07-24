@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get "", to: "pages#index", as: :pages
   post "", to: "pages#create", as: :create_page
 
-  resources :pages, path: "(*path)", only: [:show] do
+  resources :pages, path: "(*path)", only: [:show, :edit, :update, :destroy] do
     get "add", to: "pages#new", as: :new_page, on: :member
   end
 
