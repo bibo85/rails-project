@@ -4,11 +4,9 @@ class GetPageId < ApplicationService
 
   def initialize(params)
     @path = parse_path(params)
-    puts "ПУТЬ: ", @path
   end
 
   def call
-
     cur_path = "/"
     id = nil
     @path.each do |name_page|
@@ -17,10 +15,6 @@ class GetPageId < ApplicationService
       end
       page = Page.find_by(name: name_page, ancestry: cur_path)
       cur_path = "#{cur_path}#{page.id}/"
-      # puts
-
-      puts "ТЕКУЩИЙ ПУТЬ"
-      puts cur_path
       id = page.id
     end
     id
@@ -34,8 +28,6 @@ class GetPageId < ApplicationService
     else
       params[:id]
     end
-    path = path.split("/")
-    puts path.class
-    path
+    path.split("/")
   end
 end

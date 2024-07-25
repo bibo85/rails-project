@@ -19,7 +19,8 @@ class PagesController < ApplicationController
   def create
     @page = Page.new page_params
     if @page.save
-      redirect_to root_path, status: :see_other, success: "Страница успешно создана"
+      path_to_page = get_path_to_redirect(@page.path_ids)
+      redirect_to page_path(path_to_page, @page.name), status: :see_other, success: "Страница успешно создана"
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,8 +33,8 @@ class PagesController < ApplicationController
   def update
     @page = Page.find params[:id]
     if @page.update page_params
-      flash[:success] = "Страница успешно обновлена"
-      puts @page.inspect
+      path_to_page = get_path_to_redirect(@page.path_ids)
+      redirect_to page_path(path_to_page, @page.name), status: :see_other, success: "Страница успешно обновлена"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -58,11 +59,17 @@ class PagesController < ApplicationController
 
     page_id = GetPageId.call(params)
     if page_id.present?
-      puts "ID страницы"
-      puts page_id
       return page_id
     end
     raise ActiveRecord::RecordNotFound
+  end
+
+  def get_path_to_redirect(path_ids)
+    path = []
+    path_ids.each do |id|
+      path << Page.find(id).name
+    end
+    path[0..-2].join("/")
   end
 
 end

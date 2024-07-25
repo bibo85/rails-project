@@ -5,7 +5,7 @@ module PagesHelper
     content_tag(:ul, class: "nav flex-column") do
       pages.each do |page|
         current_url = "#{url}#{page.name}"
-        concat(content_tag(:li, link_to(page.name, current_url), class: "nav-item"))
+        concat(content_tag(:li, link_to(page.title, current_url), class: "nav-item"))
         render_subpages(page.descendants.arrange, "#{current_url}/")
       end
     end
@@ -16,7 +16,7 @@ module PagesHelper
       content_tag(:ul, class: "nav flex-column nested_nav") do
         pages.each do |page, children|
           current_url = "#{url}#{page.name}"
-          concat(content_tag(:li, link_to(page.name, current_url), class: "nav-item"))
+          concat(content_tag(:li, link_to(page.title, current_url), class: "nav-item"))
           render_subpages(children, "#{current_url}/") if children.present?
         end
       end
