@@ -5,7 +5,7 @@ class Page < ApplicationRecord
 
   validates :name, presence: true, format: {
     with: /\A[a-zA-Zа-яА-я_]+\z/,
-    message: "Доступны только английские и русские буквы, а также знак нижнего подчеркивания"
+    message: "- в поле доступны только английские и русские буквы, а также знак нижнего подчеркивания"
   }
   validates :title, presence: true, length: {minimum: 2, maximum: 150}
   validates :body, presence: true, length: {minimum: 2}
