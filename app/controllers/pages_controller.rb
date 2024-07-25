@@ -2,12 +2,13 @@
 
 class PagesController < ApplicationController
 
+  before_action :set_page, only: [:show, :edit, :destroy]
+
   def index
     @pages = Page.where(ancestry: "/")
   end
 
   def show
-    @page = Page.find get_page_id_from_path
   end
 
   def new
@@ -27,7 +28,6 @@ class PagesController < ApplicationController
   end
 
   def edit
-    @page = Page.find get_page_id_from_path
   end
 
   def update
@@ -41,12 +41,15 @@ class PagesController < ApplicationController
   end
 
   def destroy
-    @page = Page.find get_page_id_from_path
     @page.destroy
     redirect_to root_path, status: :see_other, success: "Страница успешно удалена"
   end
 
   private
+
+  def set_page
+    @page = Page.find get_page_id_from_path
+  end
 
   def page_params
     params.require(:page).permit(:id, :name, :title, :body, :parent_id)
