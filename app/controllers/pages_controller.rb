@@ -20,7 +20,7 @@ class PagesController < ApplicationController
     @page = Page.new page_params
     if @page.save
       path_to_page = get_path_to_redirect(@page.path_ids)
-      redirect_to page_path(path_to_page, @page.name), status: :see_other, success: "Страница успешно создана"
+      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other, success: "Страница успешно создана"
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class PagesController < ApplicationController
     @page = Page.find params[:id]
     if @page.update page_params
       path_to_page = get_path_to_redirect(@page.path_ids)
-      redirect_to page_path(path_to_page, @page.name), status: :see_other, success: "Страница успешно обновлена"
+      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other, success: "Страница успешно обновлена"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -65,6 +65,8 @@ class PagesController < ApplicationController
   end
 
   def get_path_to_redirect(path_ids)
+    return nil if path_ids.size == 1
+
     path = []
     path_ids.each do |id|
       path << Page.find(id).name
