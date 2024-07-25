@@ -22,4 +22,11 @@ module PagesHelper
       end
     )
   end
+
+  def get_formatted_text_page(text)
+    text = text.gsub(/\*\[(.*?)\]\*/) { "<strong>#{$1}</strong>" }  # жирный текст
+    text = text.gsub(/\\\\\[(.*?)\]\\\\/) { "<em>#{$1}</em>" }  # курсив
+    text = text.gsub(/\(\((.*?) (.*?)\)\)/) { "<a href='/#{$1}'>#{$2}</a>" }  # ссылка
+    text.html_safe
+  end
 end
