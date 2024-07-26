@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# has_ancestry добавляет к модели родословную. После этого модель - дерево.
 class Page < ApplicationRecord
   has_ancestry
 
