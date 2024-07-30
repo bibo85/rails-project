@@ -19,7 +19,7 @@ RSpec.describe PagesController, type: :controller do
     # проверка контекста страницы
     it 'assigns correctly context @pages' do
       pages = %w[name_first name_second name_third].map do |name|
-        FactoryBot.create(:page, name: name, title: "#{name}_title", body: "#{name}_body")
+        FactoryBot.create(:page, name:, title: "#{name}_title", body: "#{name}_body")
       end
 
       get :index

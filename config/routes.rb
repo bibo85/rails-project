@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -6,14 +8,13 @@ Rails.application.routes.draw do
   # get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "pages#index"
+  root 'pages#index'
 
-  get "add/", to: "pages#new", as: :add_page
-  get "", to: "pages#index", as: :pages
-  post "", to: "pages#create", as: :create_page
+  get 'add/', to: 'pages#new', as: :add_page
+  get '', to: 'pages#index', as: :pages
+  post '', to: 'pages#create', as: :create_page
 
-  resources :pages, path: "(*path)", only: [:show, :edit, :update, :destroy] do
-    get "add", to: "pages#new", as: :new_page, on: :member
+  resources :pages, path: '(*path)', only: %i[show edit update destroy] do
+    get 'add', to: 'pages#new', as: :new_page, on: :member
   end
-
 end

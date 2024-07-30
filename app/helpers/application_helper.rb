@@ -1,10 +1,7 @@
-module ApplicationHelper
+# frozen_string_literal: true
 
+module ApplicationHelper
   def full_title(page_title = '')
-    if page_title.present?
-      page_title
-    else
-      'Rails project'
-    end
+    page_title.presence || 'Rails project'
   end
 end

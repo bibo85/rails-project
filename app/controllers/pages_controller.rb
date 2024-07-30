@@ -2,15 +2,13 @@
 
 # Контроллер отвечает за управление страницами сайта.
 class PagesController < ApplicationController
-
-  before_action :set_page, only: [:show, :edit, :destroy]
+  before_action :set_page, only: %i[show edit destroy]
 
   def index
-    @pages = Page.where(ancestry: "/")
+    @pages = Page.where(ancestry: '/')
   end
 
-  def show
-  end
+  def show; end
 
   # Метод отображает форму для создания новой головной или дочерней страницы.
   # Создание головной страницы запускается, если в params не приходит :path или :id.
@@ -22,24 +20,24 @@ class PagesController < ApplicationController
     @page = Page.new(parent_id: get_page_id_from_path)
   end
 
+  def edit; end
+
   def create
     @page = Page.new page_params
     if @page.save
       path_to_page = get_path_to_redirect(@page.path_ids[0..-2])
-      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other, success: "Страница успешно создана"
+      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other, success: 'Страница успешно создана'
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
   end
 
   def update
     @page = Page.find params[:id]
     if @page.update page_params
       path_to_page = get_path_to_redirect(@page.path_ids[0..-2])
-      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other, success: "Страница успешно обновлена"
+      redirect_to page_path(path: path_to_page, id: @page.name), status: :see_other,
+                                                                 success: 'Страница успешно обновлена'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -47,7 +45,7 @@ class PagesController < ApplicationController
 
   def destroy
     @page.destroy
-    redirect_to root_path, status: :see_other, success: "Страница успешно удалена"
+    redirect_to root_path, status: :see_other, success: 'Страница успешно удалена'
   end
 
   private
@@ -71,12 +69,11 @@ class PagesController < ApplicationController
   # @return [Integer, String] возвращает id, если путь к странице корректный, и пустую строку, если был переход с
   #                           главной страницы.
   def get_page_id_from_path
-    return "" if params[:path].nil? && params[:id].nil?
+    return '' if params[:path].nil? && params[:id].nil?
 
     page_id = GetPageId.call(params)
-    if page_id.present?
-      return page_id
-    end
+    return page_id if page_id.present?
+
     raise ActiveRecord::RecordNotFound
   end
 
@@ -90,13 +87,11 @@ class PagesController < ApplicationController
   #   path = "name1/name2"
   # @see Page
   def get_path_to_redirect(path_ids)
-    return nil unless path_ids.present?
+    return nil if path_ids.blank?
 
-    path = []
-    path_ids.each do |id|
-      path << Page.find(id).name
+    path = path_ids.map do |id|
+      Page.find(id).name
     end
-    path.join("/")
+    path.join('/')
   end
-
 end

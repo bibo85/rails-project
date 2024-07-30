@@ -2,7 +2,6 @@
 
 # Класс GetPageId отвечает за поиск id конечной страницы из указанного пути
 class GetPageId < ApplicationService
-
   def initialize(params)
     @path = parse_path(params)
   end
@@ -15,12 +14,11 @@ class GetPageId < ApplicationService
   #   @path = "name1/name2"
   #   id = 2
   def call
-    cur_path = "/"
+    cur_path = '/'
     id = nil
     @path.each do |name_page|
-      unless Page.exists?(name: name_page, ancestry: cur_path)
-        raise ActiveRecord::RecordNotFound
-      end
+      raise ActiveRecord::RecordNotFound unless Page.exists?(name: name_page, ancestry: cur_path)
+
       page = Page.find_by(name: name_page, ancestry: cur_path)
       cur_path = "#{cur_path}#{page.id}/"
       id = page.id
@@ -43,10 +41,10 @@ class GetPageId < ApplicationService
   #   path = "name1/name2/name3"
   def parse_path(params)
     path = if params[:path].present?
-      [params[:path], params[:id]].join("/")
-    else
-      params[:id]
-    end
-    path.split("/")
+             [params[:path], params[:id]].join('/')
+           else
+             params[:id]
+           end
+    path.split('/')
   end
 end

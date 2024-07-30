@@ -2,7 +2,6 @@
 
 # Модуль-помощьник для контроллера Page. Помогает преобразовывать и отображать сложные структуры.
 module PagesHelper
-
   # Рекурсивно отображает иерархию всех страниц от указанной в параметре pages. Если у страницы есть дочерние страницы,
   # то внутри вызывается метод render_subpages, который рекурсивно обходит все дочерние страницы.
   #
@@ -19,11 +18,11 @@ module PagesHelper
   #         ancestry: "/">
   #     ]>
   # @see Page
-  def render_page_hierarchy(pages, url = "")
-    content_tag(:ul, class: "nav flex-column") do
+  def render_page_hierarchy(pages, url = '')
+    content_tag(:ul, class: 'nav flex-column') do
       pages.each do |page|
         current_url = "#{url}#{page.name}"
-        concat(content_tag(:li, link_to(page.title, current_url), class: "nav-item"))
+        concat(content_tag(:li, link_to(page.title, current_url), class: 'nav-item'))
         render_subpages(page.descendants.arrange, "#{current_url}/") if page.descendants.arrange.present?
       end
     end
@@ -40,9 +39,12 @@ module PagesHelper
   # @param text [String] строка текста для форматирования
   # @return [String] отформатированная строка, подготовленная для отображения на странице
   def get_formatted_text_page(text)
-    text = text.gsub(/\*\[(.*?)\]\*/) { "<strong>#{$1}</strong>" }  # жирный текст
-    text = text.gsub(/\\\\\[(.*?)\]\\\\/) { "<em>#{$1}</em>" }  # курсив
-    text = text.gsub(/\(\((.*?) (.*?)\)\)/) { "<a href='/#{$1}'>#{$2}</a>" }  # ссылка
+    text = text.gsub(/\*\[(.*?)\]\*/) { "<strong>#{::Regexp.last_match(1)}</strong>" } # жирный текст
+    text = text.gsub(/\\\\\[(.*?)\]\\\\/) { "<em>#{::Regexp.last_match(1)}</em>" } # курсив
+    text = # ссылка
+      text.gsub(/\(\((.*?) (.*?)\)\)/) do
+        "<a href='/#{::Regexp.last_match(1)}'>#{::Regexp.last_match(2)}</a>"
+      end
     text.html_safe
   end
 
@@ -52,16 +54,15 @@ module PagesHelper
   #
   # @param pages [Page::ActiveRecord_Relation] экземпляр модели Page, содержащий объекты страниц текущего уровня
   # @param url [String] текущий url от которого будут построены ссылки на страницы, по умолчанию пустой
-  def render_subpages(pages, url = "")
+  def render_subpages(pages, url = '')
     concat(
-      content_tag(:ul, class: "nav flex-column nested_nav") do
+      content_tag(:ul, class: 'nav flex-column nested_nav') do
         pages.each do |page, children|
           current_url = "#{url}#{page.name}"
-          concat(content_tag(:li, link_to(page.title, current_url), class: "nav-item"))
+          concat(content_tag(:li, link_to(page.title, current_url), class: 'nav-item'))
           render_subpages(children, "#{current_url}/") if children.present?
         end
       end
     )
   end
-
 end

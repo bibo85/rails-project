@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   # @note
   #   Вызывается при получении ошибки ActiveRecord::RecordNotFound при попытке получить доступ к несуществующей
   #   странице
-  def not_found(exception)
-    render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
+  def not_found(_exception)
+    render file: Rails.public_path.join('404.html').to_s, status: :not_found, layout: false
   end
 
   # Метод token_error перенаправляет пользователя на предыдущую страницу, которую получает из request.referrer.
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   # @note
   #   Вызывается при получении ошибки ActionController::InvalidAuthenticityToken при попытке отправить некорректные
   #   данные из формы
-  def token_error(exception)
-    redirect_to request.referrer, danger: "Ошибка, повторите отправку формы"
+  def token_error(_exception)
+    redirect_to request.referer, danger: 'Ошибка, повторите отправку формы'
   end
 end
