@@ -4,40 +4,37 @@ require 'rails_helper'
 
 RSpec.describe PagesHelper, type: :helper do
   describe '#render_page_hierarchy' do
-    pages_with_subpages = [
-      { name: 'name_first', title: 'first_title', body: 'first_body', parent_id: '' },
-      { name: 'name_second', title: 'second_title', body: 'second_body', parent_id: '' },
-      { name: 'name_third', title: 'third_title', body: 'third_body', parent_id: '1' },
-      { name: 'name_fourth', title: 'fourth_title', body: 'fourth_body', parent_id: '3' }
-    ]
+    context 'when a page has no child elements' do
+      let(:page1) {create(:pages)}
+      let(:page2) {create(:pages)}
 
-    it 'render page tree without subpages' do
-      pages = %w[name_first name_second name_third].map do |name|
-        FactoryBot.create(:page, name: name, title: "#{name}_title", body: "#{name}_body")
+      it 'render page tree without subpages' do
+        res = helper.render_page_hierarchy([page1, page2])
+        expected = "<ul class=\"nav flex-column\"><li class=\"nav-item\"><a href=\"#{page1.name}\">#{page1.title}</a></li><li class=\"nav-item\"><a href=\"#{page2.name}\">#{page2.title}</a></li></ul>"
+        expect(res).to eq(expected)
       end
-      res = helper.render_page_hierarchy(pages)
-      expected = '<ul class="nav flex-column"><li class="nav-item"><a href="name_first">name_first_title</a></li><li class="nav-item"><a href="name_second">name_second_title</a></li><li class="nav-item"><a href="name_third">name_third_title</a></li></ul>'
-      expect(res).to eq(expected)
     end
 
-    it 'render page tree with subpages' do
-      pages_with_subpages.map do |page|
-        FactoryBot.create(:page, name: page[:name], title: page[:title], body: page[:body], parent_id: page[:parent_id])
+    context 'when page has children' do
+      let!(:page1) {create(:pages)}
+      let!(:page2) {create(:pages)}
+      let!(:page3) {create(:pages, parent_id: '1')}
+      let!(:page4) {create(:pages, parent_id: '3')}
+
+      it 'render page tree with subpages' do
+        res = helper.render_page_hierarchy([page1, page2])
+        expected = "<ul class=\"nav flex-column\"><li class=\"nav-item\"><a href=\"#{page1.name}\">#{page1.title}</a></li><ul class=\"nav flex-column nested_nav\"><li class=\"nav-item\"><a href=\"#{page1.name}/#{page3.name}\">#{page3.title}</a></li><ul class=\"nav flex-column nested_nav\"><li class=\"nav-item\"><a href=\"#{page1.name}/#{page3.name}/#{page4.name}\">#{page4.title}</a></li></ul></ul><li class=\"nav-item\"><a href=\"#{page2.name}\">#{page2.title}</a></li></ul>"
+        expect(res).to eq(expected)
       end
-      res = helper.render_page_hierarchy(Page.where(ancestry: '/'))
-      expected = '<ul class="nav flex-column"><li class="nav-item"><a href="name_first">first_title</a></li><ul class="nav flex-column nested_nav"><li class="nav-item"><a href="name_first/name_third">third_title</a></li><ul class="nav flex-column nested_nav"><li class="nav-item"><a href="name_first/name_third/name_fourth">fourth_title</a></li></ul></ul><li class="nav-item"><a href="name_second">second_title</a></li></ul>'
-      expect(res).to eq(expected)
+
+      it 'rendering tree of subpages of a single page' do
+        cur_page = Page.find_by(id: 1)
+        res = helper.render_page_hierarchy(cur_page.children, "#{cur_page.name}/")
+        expected = "<ul class=\"nav flex-column\"><li class=\"nav-item\"><a href=\"#{page1.name}/#{page3.name}\">#{page3.title}</a></li><ul class=\"nav flex-column nested_nav\"><li class=\"nav-item\"><a href=\"#{page1.name}/#{page3.name}/#{page4.name}\">#{page4.title}</a></li></ul></ul>"
+        expect(res).to eq(expected)
+      end
     end
 
-    it 'rendering tree of subpages of a single page' do
-      pages_with_subpages.map do |page|
-        FactoryBot.create(:page, name: page[:name], title: page[:title], body: page[:body], parent_id: page[:parent_id])
-      end
-      cur_page = Page.find_by(id: 1)
-      res = helper.render_page_hierarchy(cur_page.children, "#{cur_page.name}/")
-      expected = '<ul class="nav flex-column"><li class="nav-item"><a href="name_first/name_third">third_title</a></li><ul class="nav flex-column nested_nav"><li class="nav-item"><a href="name_first/name_third/name_fourth">fourth_title</a></li></ul></ul>'
-      expect(res).to eq(expected)
-    end
   end
 
   describe '#get_formatted_text_page' do
