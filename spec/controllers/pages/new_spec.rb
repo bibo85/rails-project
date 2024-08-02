@@ -39,6 +39,11 @@ RSpec.describe PagesController, type: :controller do
         expect(assigns(:page)).to be_a_new(Page)
       end
 
+      it 'page was not found' do
+        get :new, params: {id: "#{page.name}f"}
+        expect(response).to have_http_status(:not_found)
+      end
+
     end
   end
 end
