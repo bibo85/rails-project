@@ -70,6 +70,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 6.1'
   gem 'selenium-webdriver'
+  gem "shoulda-matchers"
 end
 
 # Bootstrap
